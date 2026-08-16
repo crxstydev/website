@@ -77,6 +77,32 @@ function App() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const canvasRef = useRef(null);
 
+  // Scroll Reveal Observer Effect (เอฟเฟกต์ค่อยๆ เผยข้อความ/Section ทุกส่วน)
+  useEffect(() => {
+    const observerCallback = (entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("active");
+        }
+      });
+    };
+
+    const observerOptions = {
+      root: null,
+      rootMargin: "0px 0px -50px 0px",
+      threshold: 0.15,
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+    const revealElements = document.querySelectorAll(".reveal-on-scroll, .reveal-left, .reveal-right");
+    
+    revealElements.forEach((el) => observer.observe(el));
+
+    return () => {
+      revealElements.forEach((el) => observer.unobserve(el));
+    };
+  }, []);
+
   // Preloader Timeout Handler (1.5 วินาที)
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -104,7 +130,7 @@ function App() {
   const images = ["/tem1.png", "/tem2.png", "/tem3.png", "/tem4.png"];
   const studentImages = ["/st1.png", "/st2.png", "/st3.png", "/st4.png", "/st5.png"];
 
-  // ฟังก์ชันสำหรับการเลื่อน Section นุ่มๆ ด้วย Custom Easing (รวมถึง Home บนสุด)
+  // ฟังก์ชันสำหรับการเลื่อน Section นุ่มๆ ด้วย Custom Easing
   const scrollToSection = (e, targetId) => {
     e.preventDefault();
     setActiveTab(targetId);
@@ -119,7 +145,7 @@ function App() {
     }
 
     const distance = targetPosition - startPosition;
-    const duration = 1000; // 1 วินาที นุ่มนวลเท่ากันทุกปุ่ม
+    const duration = 1000;
     let start = null;
 
     const easeInOutCubic = (t) =>
@@ -312,7 +338,7 @@ function App() {
 
       {/* HERO SECTION */}
       <main className="hero" id="home">
-        <div className="hero-content">
+        <div className="hero-content reveal-on-scroll active">
           <div className="trusted-badge liquid-glass">
             <div className="trusted-icons">
               <span className="mini-icon">⬡</span>
@@ -373,7 +399,7 @@ function App() {
 
       {/* WHY ORDERFLOW SECTION */}
       <section className="why-section">
-        <div className="why-header">
+        <div className="why-header reveal-on-scroll">
           <div>
             <div className="why-tagline">WHY ORDERFLOW</div>
             <h2 className="why-main-title pixel-font">
@@ -388,63 +414,71 @@ function App() {
         </div>
 
         <div className="why-list">
-          <TiltCard className="why-card">
-            <div className="why-card-content">
-              <div className="why-num pixel-font">01</div>
-              <div className="why-info">
-                <h3 className="why-title">เห็น Order จริง ไม่ต้องเดาทรงกราฟ</h3>
-                <p className="why-desc">
-                  อ่านแรงซื้อขายจาก Vol, CVD และ Footprint ตรงๆ เห็นชัดว่าฝั่งไหนคุมตลาดอยู่ ไม่ต้องพึ่ง Indicator ล่าช้า
-                </p>
+          <div className="reveal-on-scroll">
+            <TiltCard className="why-card">
+              <div className="why-card-content">
+                <div className="why-num pixel-font">01</div>
+                <div className="why-info">
+                  <h3 className="why-title">เห็น Order จริง ไม่ต้องเดาทรงกราฟ</h3>
+                  <p className="why-desc">
+                    อ่านแรงซื้อขายจาก Vol, CVD และ Footprint ตรงๆ เห็นชัดว่าฝั่งไหนคุมตลาดอยู่ ไม่ต้องพึ่ง Indicator ล่าช้า
+                  </p>
+                </div>
               </div>
-            </div>
-            <div className="why-badge">REAL-TIME DATA</div>
-          </TiltCard>
+              <div className="why-badge">REAL-TIME DATA</div>
+            </TiltCard>
+          </div>
 
-          <TiltCard className="why-card">
-            <div className="why-card-content">
-              <div className="why-num pixel-font">02</div>
-              <div className="why-info">
-                <h3 className="why-title">คุม Stop Loss ได้แคบ คลังแสงไม่พัง</h3>
-                <p className="why-desc">
-                  เห็นจุด Liquidity ชัดเจน ทำให้ตั้ง SL ได้คม ผิดทางรู้ทันที ช่วยเซฟ Drawdown ไม่ให้ชนกฎ Max Loss ของกองทุน
-                </p>
+          <div className="reveal-on-scroll">
+            <TiltCard className="why-card">
+              <div className="why-card-content">
+                <div className="why-num pixel-font">02</div>
+                <div className="why-info">
+                  <h3 className="why-title">คุม Stop Loss ได้แคบ คลังแสงไม่พัง</h3>
+                  <p className="why-desc">
+                    เห็นจุด Liquidity ชัดเจน ทำให้ตั้ง SL ได้คม ผิดทางรู้ทันที ช่วยเซฟ Drawdown ไม่ให้ชนกฎ Max Loss ของกองทุน
+                  </p>
+                </div>
               </div>
-            </div>
-            <div className="why-badge">RISK CONTROL</div>
-          </TiltCard>
+              <div className="why-badge">RISK CONTROL</div>
+            </TiltCard>
+          </div>
 
-          <TiltCard className="why-card">
-            <div className="why-card-content">
-              <div className="why-num pixel-font">03</div>
-              <div className="why-info">
-                <h3 className="why-title">หยุดอาการ Overtrade และ FOMO</h3>
-                <p className="why-desc">
-                  กราฟไม่มี Setup หรือ Vol ไม่เข้า Footprint จะฟ้องทันที ช่วยให้หยุดมือเป็น ไม่ไล่ราคาตามอารมณ์
-                </p>
+          <div className="reveal-on-scroll">
+            <TiltCard className="why-card">
+              <div className="why-card-content">
+                <div className="why-num pixel-font">03</div>
+                <div className="why-info">
+                  <h3 className="why-title">หยุดอาการ Overtrade และ FOMO</h3>
+                  <p className="why-desc">
+                    กราฟไม่มี Setup หรือ Vol ไม่เข้า Footprint จะฟ้องทันที ช่วยให้หยุดมือเป็น ไม่ไล่ราคาตามอารมณ์
+                  </p>
+                </div>
               </div>
-            </div>
-            <div className="why-badge">DISCIPLINE</div>
-          </TiltCard>
+              <div className="why-badge">DISCIPLINE</div>
+            </TiltCard>
+          </div>
 
-          <TiltCard className="why-card">
-            <div className="why-card-content">
-              <div className="why-num pixel-font">04</div>
-              <div className="why-info">
-                <h3 className="why-title">ลอจิกชัดเจน ไม่ต้องนั่งจำ Pattern</h3>
-                <p className="why-desc">
-                  เลิกท่องจำรูปแบบกราฟร้อยแปด เปลี่ยนมาเข้าใจ Mechanism การจับคู่ Order เพียวๆ โฟกัสแค่เหตุผลที่ราคาขยับจริง
-                </p>
+          <div className="reveal-on-scroll">
+            <TiltCard className="why-card">
+              <div className="why-card-content">
+                <div className="why-num pixel-font">04</div>
+                <div className="why-info">
+                  <h3 className="why-title">ลอจิกชัดเจน ไม่ต้องจำ Pattern</h3>
+                  <p className="why-desc">
+                    เลิกท่องจำรูปแบบกราฟร้อยแปด เปลี่ยนมาเข้าใจ Mechanism การจับคู่ Order เพียวๆ โฟกัสแค่เหตุผลที่ราคาขยับจริง
+                  </p>
+                </div>
               </div>
-            </div>
-            <div className="why-badge">PURE LOGIC</div>
-          </TiltCard>
+              <div className="why-badge">PURE LOGIC</div>
+            </TiltCard>
+          </div>
         </div>
       </section>
 
       {/* SINGLE PRODUCT DISPLAY SECTION */}
       <section className="tools-section" id="courses">
-        <div className="tools-header">
+        <div className="tools-header reveal-on-scroll">
           <div className="tools-tagline">COURSE PACKAGES</div>
           <h2 className="tools-main-title pixel-font">
             CHOOSE YOUR <span className="text-gradient-red">TRADING PATH</span>
@@ -455,7 +489,7 @@ function App() {
         </div>
 
         {/* Toggle Switch */}
-        <div className="platform-switch-container">
+        <div className="platform-switch-container reveal-on-scroll">
           <div className="platform-switch">
             <button
               className={`platform-btn ${selectedPlan === "selfPaced" ? "active" : ""}`}
@@ -473,7 +507,7 @@ function App() {
         </div>
 
         {/* Card Content Display */}
-        <div className="single-product-container">
+        <div className="single-product-container reveal-on-scroll">
           <TiltCard className="redesigned-product-card">
             {/* Visual Header Banner with Image Carousel */}
             <div className="card-visual-banner">
@@ -662,7 +696,7 @@ function App() {
 
       {/* REVIEWS SECTION */}
       <section className="why-section" id="reviews">
-        <div className="why-header">
+        <div className="why-header reveal-on-scroll">
           <div>
             <div className="why-tagline">STUDENT REVIEWS</div>
             <h2 className="why-main-title pixel-font">
@@ -676,96 +710,108 @@ function App() {
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px", marginTop: "40px" }}>
-          <TiltCard className="why-card">
-            <div className="why-card-content" style={{ flexDirection: "column", alignItems: "flex-start", gap: "12px" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center" }}>
-                <span style={{ color: "#ef4444", fontSize: "16px" }}>★★★★★</span>
-                <span className="why-badge">Full Access Course</span>
+          <div className="reveal-on-scroll">
+            <TiltCard className="why-card">
+              <div className="why-card-content" style={{ flexDirection: "column", alignItems: "flex-start", gap: "12px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center" }}>
+                  <span style={{ color: "#ef4444", fontSize: "16px" }}>★★★★★</span>
+                  <span className="why-badge">Full Access Course</span>
+                </div>
+                <h3 className="why-title" style={{ fontSize: "18px", margin: "0" }}>bliahased</h3>
+                <p className="why-desc" style={{ fontSize: "14px", lineHeight: "1.6" }}>
+                  "มารีวิวรอบ2ครับหลังจากเริ่มคอร์สมา 2 อาทิตย์ แบบเรียนคลิปจบภายใน1วันแล้วที่เหลือมาลองในตลาดเองจนตอนนี้ได้กำไรเกินค่าเรียนไป หลายเท่าแล้วคร้บ อยากจะบอกว่ามันดีมากจริงๆสำหรับผมคนที่เคยลองมาหลายๆเทคนิค แต่ไม่เคยทำกำไรได้เองเลยสักนิดเดียวมีแต่ตามซิกจนมาเจอ orderflow อันนี้ทำให้ผมสามารถทำกำไรได้เองจริงครั้งแรก มันคุ้มจริงๆสำหรับผมดีมาก"
+                </p>
               </div>
-              <h3 className="why-title" style={{ fontSize: "18px", margin: "0" }}>bliahased</h3>
-              <p className="why-desc" style={{ fontSize: "14px", lineHeight: "1.6" }}>
-                "มารีวิวรอบ2ครับหลังจากเริ่มคอร์สมา 2 อาทิตย์ แบบเรียนคลิปจบภายใน1วันแล้วที่เหลือมาลองในตลาดเองจนตอนนี้ได้กำไรเกินค่าเรียนไป หลายเท่าแล้วคร้บ อยากจะบอกว่ามันดีมากจริงๆสำหรับผมคนที่เคยลองมาหลายๆเทคนิค แต่ไม่เคยทำกำไรได้เองเลยสักนิดเดียวมีแต่ตามซิกจนมาเจอ orderflow อันนี้ทำให้ผมสามารถทำกำไรได้เองจริงครั้งแรก มันคุ้มจริงๆสำหรับผมดีมาก"
-              </p>
-            </div>
-          </TiltCard>
+            </TiltCard>
+          </div>
 
-          <TiltCard className="why-card">
-            <div className="why-card-content" style={{ flexDirection: "column", alignItems: "flex-start", gap: "12px" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center" }}>
-                <span style={{ color: "#ef4444", fontSize: "16px" }}>★★★★★</span>
-                <span className="why-badge">Full Access Course</span>
+          <div className="reveal-on-scroll">
+            <TiltCard className="why-card">
+              <div className="why-card-content" style={{ flexDirection: "column", alignItems: "flex-start", gap: "12px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center" }}>
+                  <span style={{ color: "#ef4444", fontSize: "16px" }}>★★★★★</span>
+                  <span className="why-badge">Full Access Course</span>
+                </div>
+                <h3 className="why-title" style={{ fontSize: "18px", margin: "0" }}>wizchy_th_789</h3>
+                <p className="why-desc" style={{ fontSize: "14px", lineHeight: "1.6" }}>
+                  "สอนดีครับ จากคนไม่รู้เรื่องเลยอย่างผม ยังสามารถเข้าใจได้ ถือว่าสอนลงรายละเอียดดีครับ บวกกับการ ให้ดูว่าที่มาที่ไปของการเทรดจริงต้องดูยังไง เริ่มจากตรงไหน เหมือนได้เปิดโลกใหม่เลยครับ ผู้สอนแนะนำระหว่างสอนดีครับมีทวนให้ตลอดถ้าไม่เข้าใจ"
+                </p>
               </div>
-              <h3 className="why-title" style={{ fontSize: "18px", margin: "0" }}>wizchy_th_789</h3>
-              <p className="why-desc" style={{ fontSize: "14px", lineHeight: "1.6" }}>
-                "สอนดีครับ จากคนไม่รู้เรื่องเลยอย่างผม ยังสามารถเข้าใจได้ ถือว่าสอนลงรายละเอียดดีครับ บวกกับการ ให้ดูว่าที่มาที่ไปของการเทรดจริงต้องดูยังไง เริ่มจากตรงไหน เหมือนได้เปิดโลกใหม่เลยครับ ผู้สอนแนะนำระหว่างสอนดีครับมีทวนให้ตลอดถ้าไม่เข้าใจ"
-              </p>
-            </div>
-          </TiltCard>
+            </TiltCard>
+          </div>
 
-          <TiltCard className="why-card">
-            <div className="why-card-content" style={{ flexDirection: "column", alignItems: "flex-start", gap: "12px" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center" }}>
-                <span style={{ color: "#ef4444", fontSize: "16px" }}>★★★★★</span>
-                <span className="why-badge">Full Access Course</span>
+          <div className="reveal-on-scroll">
+            <TiltCard className="why-card">
+              <div className="why-card-content" style={{ flexDirection: "column", alignItems: "flex-start", gap: "12px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center" }}>
+                  <span style={{ color: "#ef4444", fontSize: "16px" }}>★★★★★</span>
+                  <span className="why-badge">Full Access Course</span>
+                </div>
+                <h3 className="why-title" style={{ fontSize: "18px", margin: "0" }}>ingbluejay</h3>
+                <p className="why-desc" style={{ fontSize: "14px", lineHeight: "1.6" }}>
+                  "ส่วนตัวนี่เคยเรียนจากคนอื่นมา ไม่ค่อยเข้าใจ orderflow ซะที จนมาลองเรียนกับน้องไผ่ เรียนปุ๊ปกระจ่างเลยอะไรที่งงๆอยู่คือเข้าใจหมดเลย ไผ่ไม่มีกั๊กสอนหมด แนะนำอยากให้เพิ่มสอนจากกราฟจริงเพิ่มเติมลงในคลิปควบคู่ไปให้หน่อยแบบประกอบร่างรวมกันกับข้อมูลที่เรียนมาทั้งหมดเวลาหาedgeก่อนเข้าเทรด เผื่อคนไม่เข้าใจจะได้เกทเลย ขอบคุณมากที่เอาความรู้ที่ยากๆมาสอนให้เข้าใจง่าย !!ถูกและดีมีจริงนะทุกคน!!"
+                </p>
               </div>
-              <h3 className="why-title" style={{ fontSize: "18px", margin: "0" }}>ingbluejay</h3>
-              <p className="why-desc" style={{ fontSize: "14px", lineHeight: "1.6" }}>
-                "ส่วนตัวนี่เคยเรียนจากคนอื่นมา ไม่ค่อยเข้าใจ orderflow ซะที จนมาลองเรียนกับน้องไผ่ เรียนปุ๊ปกระจ่างเลยอะไรที่งงๆอยู่คือเข้าใจหมดเลย ไผ่ไม่มีกั๊กสอนหมด แนะนำอยากให้เพิ่มสอนจากกราฟจริงเพิ่มเติมลงในคลิปควบคู่ไปให้หน่อยแบบประกอบร่างรวมกันกับข้อมูลที่เรียนมาทั้งหมดเวลาหาedgeก่อนเข้าเทรด เผื่อคนไม่เข้าใจจะได้เกทเลย ขอบคุณมากที่เอาความรู้ที่ยากๆมาสอนให้เข้าใจง่าย !!ถูกและดีมีจริงนะทุกคน!!"
-              </p>
-            </div>
-          </TiltCard>
+            </TiltCard>
+          </div>
 
-          <TiltCard className="why-card">
-            <div className="why-card-content" style={{ flexDirection: "column", alignItems: "flex-start", gap: "12px" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center" }}>
-                <span style={{ color: "#ef4444", fontSize: "16px" }}>★★★★★</span>
-                <span className="why-badge">Full Access Course</span>
+          <div className="reveal-on-scroll">
+            <TiltCard className="why-card">
+              <div className="why-card-content" style={{ flexDirection: "column", alignItems: "flex-start", gap: "12px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center" }}>
+                  <span style={{ color: "#ef4444", fontSize: "16px" }}>★★★★★</span>
+                  <span className="why-badge">Full Access Course</span>
+                </div>
+                <h3 className="why-title" style={{ fontSize: "18px", margin: "0" }}>attakler</h3>
+                <p className="why-desc" style={{ fontSize: "14px", lineHeight: "1.6" }}>
+                  "อาจารย์สอนแบบเป็นกันเอง เข้าใจง่าย สอนเน้นๆเนื้อๆที่จะนำไปเทรดได้เลย ตั้งแต่ วางแผน bias หาจุดเข้าเทรด การรอจังหวะ การใช้Platform ทุกอย่างสรุปมาแบบเข้าใจง่ายมากๆ ชอบครับ หลายอย่างเป็นปัญหามาก่อนหน้านี้(จากที่ศึกษาจาาต่างประเทศเองแล้วไม่เข้าใจ) ก็มาเข้าใจจากการเรียนไม่กี่ชั่วโมง ตรงไหนตามไม่ทันอาจารย์ใจดียินดีทวนให้ซ้ำ หลังจากเรียนวิธีการนี้จะพบว่าจริงๆง่ายกว่าและมีเหตุผลกว่าวิชาอื่นๆที่แพร่หลายอยู่ก่อนด้วยซ้ำ ผมคิดหลายคนอาจมองว่ายากจากหลายๆที่อัพค่าวิชาไปแพงมากด้วย แต่ที่นี่อาจารย์คิดราคาน่ารักราคาแบ่งปันราคาเอาสังคมเปิดโอกาสให้น้องๆได้ศึกษา ขอบคุณมากๆครับ สำหรับคนสนใจแนะนำจริงๆ"
+                </p>
               </div>
-              <h3 className="why-title" style={{ fontSize: "18px", margin: "0" }}>attakler</h3>
-              <p className="why-desc" style={{ fontSize: "14px", lineHeight: "1.6" }}>
-                "อาจารย์สอนแบบเป็นกันเอง เข้าใจง่าย สอนเน้นๆเนื้อๆที่จะนำไปเทรดได้เลย ตั้งแต่ วางแผน bias หาจุดเข้าเทรด การรอจังหวะ การใช้Platform ทุกอย่างสรุปมาแบบเข้าใจง่ายมากๆ ชอบครับ หลายอย่างเป็นปัญหามาก่อนหน้านี้(จากที่ศึกษาจาาต่างประเทศเองแล้วไม่เข้าใจ) ก็มาเข้าใจจากการเรียนไม่กี่ชั่วโมง ตรงไหนตามไม่ทันอาจารย์ใจดียินดีทวนให้ซ้ำ หลังจากเรียนวิธีการนี้จะพบว่าจริงๆง่ายกว่าและมีเหตุผลกว่าวิชาอื่นๆที่แพร่หลายอยู่ก่อนด้วยซ้ำ ผมคิดหลายคนอาจมองว่ายากจากหลายๆที่อัพค่าวิชาไปแพงมากด้วย แต่ที่นี่อาจารย์คิดราคาน่ารักราคาแบ่งปันราคาเอาสังคมเปิดโอกาสให้น้องๆได้ศึกษา ขอบคุณมากๆครับ สำหรับคนสนใจแนะนำจริงๆ"
-              </p>
-            </div>
-          </TiltCard>
+            </TiltCard>
+          </div>
 
-          <TiltCard className="why-card">
-            <div className="why-card-content" style={{ flexDirection: "column", alignItems: "flex-start", gap: "12px" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center" }}>
-                <span style={{ color: "#ef4444", fontSize: "16px" }}>★★★★★</span>
-                <span className="why-badge">Full Access Course</span>
+          <div className="reveal-on-scroll">
+            <TiltCard className="why-card">
+              <div className="why-card-content" style={{ flexDirection: "column", alignItems: "flex-start", gap: "12px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center" }}>
+                  <span style={{ color: "#ef4444", fontSize: "16px" }}>★★★★★</span>
+                  <span className="why-badge">Full Access Course</span>
+                </div>
+                <h3 className="why-title" style={{ fontSize: "18px", margin: "0" }}>lnw_new</h3>
+                <p className="why-desc" style={{ fontSize: "14px", lineHeight: "1.6" }}>
+                  "สอนครั้งเเรกดีมากครับว้าวเลย เปิดประสบการณ์สุดๆทีแรกคิดว่าOrderflow จะแต่ถ้าลองเปิดในจริงๆง่ายม๊ากๆยิ่งคนสอนสอนเข้าใจสุดๆเนื้อแน่นๆ ทุกเนื้อหากระจ่างในการสอนเดียว พี่ไผ่เฟรนลี่คุยง่ายน่ารัก ไม่รู้สึกกดดันเลยเหมือนเป็นพี่ชายคนนึง สอนหมดไม่มีกั๊ก ถามได้หมด รักพี่ไผ่ฮ่ะ"
+                </p>
               </div>
-              <h3 className="why-title" style={{ fontSize: "18px", margin: "0" }}>lnw_new</h3>
-              <p className="why-desc" style={{ fontSize: "14px", lineHeight: "1.6" }}>
-                "สอนครั้งเเรกดีมากครับว้าวเลย เปิดประสบการณ์สุดๆทีแรกคิดว่าOrderflow จะแต่ถ้าลองเปิดในจริงๆง่ายม๊ากๆยิ่งคนสอนสอนเข้าใจสุดๆเนื้อแน่นๆ ทุกเนื้อหากระจ่างในการสอนเดียว พี่ไผ่เฟรนลี่คุยง่ายน่ารัก ไม่รู้สึกกดดันเลยเหมือนเป็นพี่ชายคนนึง สอนหมดไม่มีกั๊ก ถามได้หมด รักพี่ไผ่ฮ่ะ"
-              </p>
-            </div>
-          </TiltCard>
+            </TiltCard>
+          </div>
 
-          <TiltCard className="why-card">
-            <div className="why-card-content" style={{ flexDirection: "column", alignItems: "flex-start", gap: "12px" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center" }}>
-                <span style={{ color: "#ef4444", fontSize: "16px" }}>★★★★★</span>
-                <span className="why-badge">Full Access Course</span>
+          <div className="reveal-on-scroll">
+            <TiltCard className="why-card">
+              <div className="why-card-content" style={{ flexDirection: "column", alignItems: "flex-start", gap: "12px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center" }}>
+                  <span style={{ color: "#ef4444", fontSize: "16px" }}>★★★★★</span>
+                  <span className="why-badge">Full Access Course</span>
+                </div>
+                <h3 className="why-title" style={{ fontSize: "18px", margin: "0" }}>bliahased</h3>
+                <p className="why-desc" style={{ fontSize: "14px", lineHeight: "1.6" }}>
+                  "ไม่กักความรุ้เลยเวลาคนเรียนมีคำถามอะไรตอบทุกอย่างเป็นกันเองมากครับเข้ามาฟังแล้วรุ้สึกไม่เครียดเลย ทำให้ เข้าใจการทำงานของตลาดว่าอะไรยังไงเป็นมายังไง ดีมากครับ"
+                </p>
               </div>
-              <h3 className="why-title" style={{ fontSize: "18px", margin: "0" }}>bliahased</h3>
-              <p className="why-desc" style={{ fontSize: "14px", lineHeight: "1.6" }}>
-                "ไม่กักความรุ้เลยเวลาคนเรียนมีคำถามอะไรตอบทุกอย่างเป็นกันเองมากครับเข้ามาฟังแล้วรุ้สึกไม่เครียดเลย ทำให้ เข้าใจการทำงานของตลาดว่าอะไรยังไงเป็นมายังไง ดีมากครับ"
-              </p>
-            </div>
-          </TiltCard>
+            </TiltCard>
+          </div>
         </div>
       </section>
 
       {/* STUDENT SHOWCASE SECTION */}
       <section className="showcase-section" id="showcase">
-        <div className="showcase-header">
+        <div className="showcase-header reveal-on-scroll">
           <div className="why-tagline">STUDIES SHOWCASE</div>
           <h2 className="showcase-main-title pixel-font">
             Real charts. <span className="text-gradient-blue">Real sessions.</span>
           </h2>
         </div>
 
-        <div className="showcase-window-container">
+        <div className="showcase-window-container reveal-on-scroll">
           <div className="showcase-window liquid-glass">
             <div className="window-header">
               <div className="window-dots">
@@ -808,7 +854,7 @@ function App() {
 
       {/* FINAL CTA SECTION */}
       <section className="cta-final-section">
-        <div className="cta-container">
+        <div className="cta-container reveal-on-scroll">
           <span className="cta-tagline">READY TO TRADE WITH EDGE?</span>
           <h2 className="cta-title">
             Upgrade Your <span className="text-gradient-red">Trading Edge.</span>

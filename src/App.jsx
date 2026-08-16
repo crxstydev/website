@@ -405,7 +405,7 @@ function App() {
             <h2 className="why-main-title pixel-font">
               Four reasons <br />
               <span className="text-gradient-red">serious traders</span> <br />
-              pick us.
+              use orderflow.
             </h2>
           </div>
           <div className="why-subtitle">
@@ -421,7 +421,7 @@ function App() {
                 <div className="why-info">
                   <h3 className="why-title">เห็น Order จริง ไม่ต้องเดาทรงกราฟ</h3>
                   <p className="why-desc">
-                    อ่านแรงซื้อขายจาก Vol, CVD และ Footprint ตรงๆ เห็นชัดว่าฝั่งไหนคุมตลาดอยู่ ไม่ต้องพึ่ง Indicator ล่าช้า
+                    อ่านแรงซื้อขายจาก Vol และ Footprint ตรงๆ เห็นชัดว่าฝั่งไหนคุมตลาดอยู่ ไม่ต้องพึ่ง Indicator ล่าช้า
                   </p>
                 </div>
               </div>
@@ -464,7 +464,7 @@ function App() {
               <div className="why-card-content">
                 <div className="why-num pixel-font">04</div>
                 <div className="why-info">
-                  <h3 className="why-title">ลอจิกชัดเจน ไม่ต้องจำ Pattern</h3>
+                  <h3 className="why-title">logic ชัดเจน ไม่ต้องจำ Pattern</h3>
                   <p className="why-desc">
                     เลิกท่องจำรูปแบบกราฟร้อยแปด เปลี่ยนมาเข้าใจ Mechanism การจับคู่ Order เพียวๆ โฟกัสแค่เหตุผลที่ราคาขยับจริง
                   </p>
@@ -701,7 +701,7 @@ function App() {
             <div className="why-tagline">STUDENT REVIEWS</div>
             <h2 className="why-main-title pixel-font">
               WHAT OUR <br />
-              <span className="text-gradient-red">TRADERS SAY</span>
+              <span className="text-gradient-red">STUDENTS SAY</span>
             </h2>
           </div>
           <div className="why-subtitle">

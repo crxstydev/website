@@ -1846,3 +1846,42 @@ html, body {
   scrollbar-width: thin;
   scrollbar-color: rgba(239, 68, 68, 0.5) rgba(255, 255, 255, 0.03);
 }
+/* =========================================================
+   GLOBAL CUSTOM SCROLLBAR (สำหรับทั้งเว็บไซต์)
+========================================================= */
+
+/* 1. กำหนดขนาดความกว้างของ Scrollbar ทั้งเว็บ */
+::-webkit-scrollbar {
+  width: 8px;              /* ความกว้างสำหรับ Vertical Scrollbar */
+  height: 8px;             /* ความสูงสำหรับ Horizontal Scrollbar */
+}
+
+/* 2. พื้นหลังร่อง Scrollbar (Track) */
+::-webkit-scrollbar-track {
+  background: #09090b;     /* สีดำเนียนไปกับพื้นหลังเว็บ */
+}
+
+/* 3. แท่งเลื่อน Scrollbar (Thumb) */
+::-webkit-scrollbar-thumb {
+  background: rgba(239, 68, 68, 0.35); /* สีแดงนีออนโปร่งแสง */
+  border-radius: 9999px;               /* ทำมุมมน */
+  border: 2px solid #09090b;           /* เว้นขอบให้ดูมีมิติ */
+  transition: background 0.2s ease;
+}
+
+/* 4. สีแท่ง Scrollbar ตอนนำเมาส์ไปชี้ (Hover) */
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(239, 68, 68, 0.8);   /* สว่างขึ้นเมื่อ Hover */
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+}
+
+/* 5. ตอนกำลังกดลาก (Active) */
+::-webkit-scrollbar-thumb:active {
+  background: #ef4444;                 /* สีแดงสด */
+}
+
+/* 6. รองรับการแสดงผลบน Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(239, 68, 68, 0.4) #09090b;
+}

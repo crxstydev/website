@@ -4,7 +4,7 @@ import "./App.css";
 // Instagram Target URL
 const INSTAGRAM_URL = "https://www.instagram.com/crx.wrld?igsh=NGc0dXIwMWs5ZmQ2&utm_source=qr";
 
-// Hook สำหรับตัวเลขนับอนิเมชัน
+// Hook for Count Up Animation
 function useCountUp(end, duration = 1500, decimals = 0) {
   const [count, setCount] = useState(0);
 
@@ -25,7 +25,7 @@ function useCountUp(end, duration = 1500, decimals = 0) {
   return count.toFixed(decimals);
 }
 
-// คอมโพเนนต์การ์ด 3D Interactive Spotlight Tilt
+// 3D Interactive Spotlight Tilt Card Component
 function TiltCard({ children, className = "", onClick }) {
   const cardRef = useRef(null);
   const [spotlightPos, setSpotlightPos] = useState({ x: 0, y: 0, opacity: 0 });
@@ -77,7 +77,7 @@ function App() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const canvasRef = useRef(null);
 
-  // Scroll Reveal Observer Effect (เอฟเฟกต์ค่อยๆ เผยข้อความ/Section ทุกส่วน)
+  // Scroll Reveal Observer Effect
   useEffect(() => {
     const observerCallback = (entries, observer) => {
       entries.forEach((entry) => {
@@ -103,7 +103,7 @@ function App() {
     };
   }, []);
 
-  // Preloader Timeout Handler (1.5 วินาที)
+  // Preloader Timeout Handler (1.5 seconds)
   useEffect(() => {
     const timer = setTimeout(() => {
       const preloader = document.getElementById("preloader");
@@ -115,22 +115,22 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  // State สำหรับ Section Course Packages & Carousel
+  // State for Course Packages & Carousel
   const [selectedPlan, setSelectedPlan] = useState("selfPaced");
   const [imgIndex, setImgIndex] = useState(0);
 
-  // State สำหรับ Student Showcase Section
+  // State for Student Showcase Section
   const [showcaseIndex, setShowcaseIndex] = useState(0);
 
-  // State สำหรับ Lightbox Modal
+  // State for Lightbox Modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImageSrc, setModalImageSrc] = useState("");
 
-  // รูปภาพในการ์ดสินค้า
+  // Assets
   const images = ["/tem1.png", "/tem2.png", "/tem3.png", "/tem4.png"];
   const studentImages = ["/st1.png", "/st2.png", "/st3.png", "/st4.png", "/st5.png"];
 
-  // ฟังก์ชันสำหรับการเลื่อน Section นุ่มๆ ด้วย Custom Easing
+  // Custom Smooth Scrolling with Easing
   const scrollToSection = (e, targetId) => {
     e.preventDefault();
     setActiveTab(targetId);
@@ -409,7 +409,7 @@ function App() {
             </h2>
           </div>
           <div className="why-subtitle">
-            "ปลดล็อกศักยภาพการเทรดด้วยการมองเห็นสภาพคล่องจริงของสถาบัน เพื่อให้ทุกการส่งคำสั่งซื้อขายของคุณได้เปรียบที่สุดในตลาด"
+            "Unlock your full trading potential by tracking real institutional liquidity, giving every execution a distinct statistical edge."
           </div>
         </div>
 
@@ -419,9 +419,9 @@ function App() {
               <div className="why-card-content">
                 <div className="why-num pixel-font">01</div>
                 <div className="why-info">
-                  <h3 className="why-title">เห็น Order จริง ไม่ต้องเดาทรงกราฟ</h3>
+                  <h3 className="why-title">Real Order Insights, No Chart Guessing</h3>
                   <p className="why-desc">
-                    อ่านแรงซื้อขายจาก Vol และ Footprint ตรงๆ เห็นชัดว่าฝั่งไหนคุมตลาดอยู่ ไม่ต้องพึ่ง Indicator ล่าช้า
+                    Read buying and selling pressure directly through Volume and Footprint. Clear market control without lagging indicators.
                   </p>
                 </div>
               </div>
@@ -434,9 +434,9 @@ function App() {
               <div className="why-card-content">
                 <div className="why-num pixel-font">02</div>
                 <div className="why-info">
-                  <h3 className="why-title">คุม Stop Loss ได้แคบ คลังแสงไม่พัง</h3>
+                  <h3 className="why-title">Tight Stop Loss, Protect Drawdown</h3>
                   <p className="why-desc">
-                    เห็นจุด Liquidity ชัดเจน ทำให้ตั้ง SL ได้คม ผิดทางรู้ทันที ช่วยเซฟ Drawdown ไม่ให้ชนกฎ Max Loss ของกองทุน
+                    Identify precise liquidity pools to place tight Stop Losses. Know instantly when invalidated and keep drawdown well within Prop Firm rules.
                   </p>
                 </div>
               </div>
@@ -449,9 +449,9 @@ function App() {
               <div className="why-card-content">
                 <div className="why-num pixel-font">03</div>
                 <div className="why-info">
-                  <h3 className="why-title">หยุดอาการ Overtrade และ FOMO</h3>
+                  <h3 className="why-title">Eliminate Overtrading & FOMO</h3>
                   <p className="why-desc">
-                    กราฟไม่มี Setup หรือ Vol ไม่เข้า Footprint จะฟ้องทันที ช่วยให้หยุดมือเป็น ไม่ไล่ราคาตามอารมณ์
+                    When there is no setup or volume, the Footprint warns you instantly. Know when to stay out and avoid emotional chasing.
                   </p>
                 </div>
               </div>
@@ -464,9 +464,9 @@ function App() {
               <div className="why-card-content">
                 <div className="why-num pixel-font">04</div>
                 <div className="why-info">
-                  <h3 className="why-title">logic ชัดเจน ไม่ต้องจำ Pattern</h3>
+                  <h3 className="why-title">Pure Market Logic, No Pattern Memorization</h3>
                   <p className="why-desc">
-                    เลิกท่องจำรูปแบบกราฟร้อยแปด เปลี่ยนมาเข้าใจ Mechanism การจับคู่ Order เพียวๆ โฟกัสแค่เหตุผลที่ราคาขยับจริง
+                    Stop memorizing endless chart patterns. Understand pure order-matching mechanics and focus strictly on why price moves.
                   </p>
                 </div>
               </div>
@@ -484,7 +484,7 @@ function App() {
             CHOOSE YOUR <span className="text-gradient-red">TRADING PATH</span>
           </h2>
           <p className="tools-sub-text">
-            เลือกแพ็กเกจเรียน Order Flow เพื่อยกระดับการเทรดของคุณแบบสเต็ปบายสเต็ป
+            Select the learning path that fits your goals and master Order Flow step by step.
           </p>
         </div>
 
@@ -495,13 +495,13 @@ function App() {
               className={`platform-btn ${selectedPlan === "selfPaced" ? "active" : ""}`}
               onClick={() => setSelectedPlan("selfPaced")}
             >
-              Self-Paced (เรียนด้วยตัวเอง)
+              VIP Mentorship
             </button>
             <button
               className={`platform-btn ${selectedPlan === "mentorship" ? "active" : ""}`}
               onClick={() => setSelectedPlan("mentorship")}
             >
-              Mentorship (เรียน + มีโค้ชดูแล)
+              Full Access Course
             </button>
           </div>
         </div>
@@ -520,7 +520,7 @@ function App() {
                   className="carousel-img"
                   onClick={() => openModal(images[imgIndex])}
                   style={{ cursor: "pointer" }}
-                  title="คลิกเพื่อขยายรูปภาพ"
+                  title="Click to expand"
                 />
                 
                 <button className="carousel-btn prev-btn" onClick={handlePrevImg}>❮</button>
@@ -547,23 +547,23 @@ function App() {
                   <div className="pkg-title-area">
                     <div className="badge-pills">
                       <span className="pill-tag bestseller">POPULAR</span>
-                      <span className="pill-tag sub">SELF-PACED</span>
+                      <span className="pill-tag sub">PRIVATE MENTORSHIP</span>
                     </div>
                     <div className="pkg-title-row">
-                      <h3 className="pkg-name">Standard Access</h3>
+                      <h3 className="pkg-name">VIP Access</h3>
                     </div>
                     <p className="pkg-summary-desc">
-                      คอร์สเรียนเจาะลึกการอ่าน Order Flow, Footprint, และ Volume Profile ตั้งแต่พื้นฐานจนถึงการสร้าง Setup เข้าเทรดจริง
+                      An intensive 1-on-1 Order Flow program with personalized coaching, trade journal reviews, and custom trading system setup.
                     </p>
                   </div>
 
                   <div className="price-box-side">
                     <div className="price-item-line">
                       <div>
-                        <div className="price-type">Standard Access</div>
-                        <div className="price-type-sub">เข้าถึงวิดีโอเนื้อหาอย่างเดียว</div>
+                        <div className="price-type">PRIVATE MENTORSHIP</div>
+                        <div className="price-type-sub">1-on-1 Coaching + Course Content + Discord Community + Motivewave Templates</div>
                       </div>
-                      <div className="price-amount">$36.23 / ฿1199</div>
+                      <div className="price-amount">$105.80 / ฿3500</div>
                     </div>
                   </div>
                 </div>
@@ -583,29 +583,43 @@ function App() {
                     <div className="feature-check-item">
                       <span className="check-icon">✓</span>
                       <div>
+                        <div className="feature-item-title">1-on-1 Live Coaching</div>
+                        <div className="feature-item-desc">Personalized sessions to refine your execution and strategy</div>
+                      </div>
+                    </div>
+                    <div className="feature-check-item">
+                      <span className="check-icon">✓</span>
+                      <div>
                         <div className="feature-item-title">Full Video Modules</div>
-                        <div className="feature-item-desc">เนื้อหาบทเรียน 11บท ดูซ้ำได้ตลอดชีพ</div>
+                        <div className="feature-item-desc">11 comprehensive video lessons with lifetime access</div>
+                      </div>
+                    </div>
+                    <div className="feature-check-item">
+                      <span className="check-icon">✓</span>
+                      <div>
+                        <div className="feature-item-title">Motivewave Templates</div>
+                        <div className="feature-item-desc">Ready-to-use Order Flow chart setups and configurations</div>
                       </div>
                     </div>
                     <div className="feature-check-item">
                       <span className="check-icon">✓</span>
                       <div>
                         <div className="feature-item-title">Private Discord Community</div>
-                        <div className="feature-item-desc">เข้ากลุ่มพูดคุย แลกเปลี่ยนแผนการเทรดรายวัน</div>
+                        <div className="feature-item-desc">Exclusive trader channel for daily breakdowns and trade plans</div>
                       </div>
                     </div>
                     <div className="feature-check-item">
                       <span className="check-icon">✓</span>
                       <div>
                         <div className="feature-item-title">Weekly Live Q&A / Review</div>
-                        <div className="feature-item-desc">ไลฟ์สตรีมทบทวน กราฟประจำสัปดาห์ และตอบคำถามสงสัย</div>
+                        <div className="feature-item-desc">Weekly live market recaps and direct Q&A support</div>
                       </div>
                     </div>
                     <div className="feature-check-item">
                       <span className="check-icon">✓</span>
                       <div>
-                        <div className="feature-item-title">Lifetime Course Updates</div>
-                        <div className="feature-item-desc">อัปเดตเนื้อหาและเทคนิคใหม่ๆ ฟรี ตลอดอายุการใช้งาน</div>
+                        <div className="feature-item-title">Lifetime Updates</div>
+                        <div className="feature-item-desc">Free access to all future strategy and content updates</div>
                       </div>
                     </div>
                   </div>
@@ -623,7 +637,7 @@ function App() {
                       <h3 className="pkg-name">Full Access Course</h3>
                     </div>
                     <p className="pkg-summary-desc">
-                      คอร์สเรียนเจาะลึกการอ่าน Order Flow, Footprint, และ Volume Profile ตั้งแต่พื้นฐานจนถึงการสร้าง Setup เข้าเทรดจริง
+                      Master Order Flow, Footprint, and Volume Profile from the ground up to build your own high-precision execution setups.
                     </p>
                   </div>
 
@@ -631,7 +645,7 @@ function App() {
                     <div className="price-item-line">
                       <div>
                         <div className="price-type">Full Access Course</div>
-                        <div className="price-type-sub">เนื้อหา + เข้ากลุ่มดิสคอร์ด + Template กราฟ</div>
+                        <div className="price-type-sub">11 Video Modules + Discord Community + Motivewave Templates</div>
                       </div>
                       <div className="price-amount">$42.28 / ฿1399</div>
                     </div>
@@ -654,35 +668,35 @@ function App() {
                       <span className="check-icon">✓</span>
                       <div>
                         <div className="feature-item-title">Full Video Modules</div>
-                        <div className="feature-item-desc">เนื้อหาบทเรียน 11บท ดูซ้ำได้ตลอดชีพ</div>
+                        <div className="feature-item-desc">11 comprehensive video lessons with lifetime access</div>
                       </div>
                     </div>
                     <div className="feature-check-item">
                       <span className="check-icon">✓</span>
                       <div>
                         <div className="feature-item-title">Chart Templates & Setups</div>
-                        <div className="feature-item-desc">แจกไฟล์ Template Order Flow พร้อมใช้งานทันที</div>
+                        <div className="feature-item-desc">Pre-configured Order Flow chart templates ready to deploy</div>
                       </div>
                     </div>
                     <div className="feature-check-item">
                       <span className="check-icon">✓</span>
                       <div>
                         <div className="feature-item-title">Private Discord Community</div>
-                        <div className="feature-item-desc">เข้ากลุ่มพูดคุย แลกเปลี่ยนแผนการเทรดรายวัน</div>
+                        <div className="feature-item-desc">Exclusive trader channel for daily breakdowns and trade plans</div>
                       </div>
                     </div>
                     <div className="feature-check-item">
                       <span className="check-icon">✓</span>
                       <div>
                         <div className="feature-item-title">Weekly Live Q&A / Review</div>
-                        <div className="feature-item-desc">ไลฟ์สตรีมทบทวน กราฟประจำสัปดาห์ และตอบคำถามสงสัย</div>
+                        <div className="feature-item-desc">Weekly live market recaps and direct Q&A support</div>
                       </div>
                     </div>
                     <div className="feature-check-item">
                       <span className="check-icon">✓</span>
                       <div>
                         <div className="feature-item-title">Lifetime Course Updates</div>
-                        <div className="feature-item-desc">อัปเดตเนื้อหาและเทคนิคใหม่ๆ ฟรี ตลอดอายุการใช้งาน</div>
+                        <div className="feature-item-desc">Free access to all future strategy and content updates</div>
                       </div>
                     </div>
                   </div>
@@ -694,7 +708,7 @@ function App() {
         </div>
       </section>
 
-      {/* REVIEWS SECTION */}
+      {/* REVIEWS SECTION (KEPT IN THAI AS REQUESTED) */}
       <section className="why-section" id="reviews">
         <div className="why-header reveal-on-scroll">
           <div>
@@ -705,7 +719,7 @@ function App() {
             </h2>
           </div>
           <div className="why-subtitle">
-            "เสียงตอบรับจริงจากนักเรียนในคอร์สคร่าวๆ ที่นำความรู้ Order Flow ไปลงมือปฏิบัติจริงในตลาด"
+            "Real feedback from students applying Order Flow concepts directly in live market conditions."
           </div>
         </div>
 
@@ -832,7 +846,7 @@ function App() {
                 className="window-img"
                 onClick={() => openModal(studentImages[showcaseIndex])}
                 style={{ cursor: "pointer" }}
-                title="คลิกเพื่อขยายรูปภาพ"
+                title="Click to expand"
               />
               <button className="window-nav-btn next" onClick={handleNextShowcase}>❯</button>
             </div>

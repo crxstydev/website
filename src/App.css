@@ -1119,6 +1119,169 @@ html, body {
   transform: scale(1.1);
 }
 
+/* =========================================================
+   LEGAL TERMS MODAL / POPUP (RED-BLACK GLASSMORPHISM)
+========================================================= */
+
+.legal-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 3, 5, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.legal-modal-box {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  background: rgba(18, 18, 22, 0.95);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 20px;
+  padding: 32px 28px 28px;
+  box-shadow: 
+    0 20px 50px rgba(0, 0, 0, 0.8),
+    0 0 30px rgba(239, 68, 68, 0.15);
+  color: #ffffff;
+}
+
+.legal-modal-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #a1a1aa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.legal-modal-close:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.5);
+  color: #ffffff;
+}
+
+.legal-modal-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.legal-modal-header .warning-icon {
+  font-size: 24px;
+  color: #ef4444;
+}
+
+.legal-modal-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+.legal-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 28px;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.legal-modal-body::-webkit-scrollbar {
+  width: 5px;
+}
+.legal-modal-body::-webkit-scrollbar-thumb {
+  background: rgba(239, 68, 68, 0.3);
+  border-radius: 4px;
+}
+
+.legal-item {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
+.legal-text-th {
+  font-size: 14px;
+  font-weight: 600;
+  color: #f4f4f5;
+  line-height: 1.5;
+  margin-bottom: 4px;
+}
+
+.legal-text-en {
+  font-size: 12px;
+  color: #9ca3af;
+  line-height: 1.4;
+}
+
+.legal-highlight {
+  color: #ef4444;
+  font-weight: 700;
+}
+
+.legal-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.legal-btn-cancel {
+  padding: 10px 20px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #a1a1aa;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.legal-btn-cancel:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+}
+
+.legal-btn-accept {
+  padding: 10px 24px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.6), rgba(185, 28, 28, 0.4));
+  border: 1px solid rgba(239, 68, 68, 0.8);
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.legal-btn-accept:hover {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.8), rgba(185, 28, 28, 0.6));
+  box-shadow: 0 0 25px rgba(239, 68, 68, 0.5);
+  transform: translateY(-1px);
+}
+
 /* ==========================================
    FINAL CTA SECTION & DISCORD LINK
    ========================================== */
@@ -1355,6 +1518,20 @@ html, body {
     transform: translateX(50%);
   }
 
+  .legal-modal-box {
+    padding: 24px 18px 20px;
+  }
+
+  .legal-modal-footer {
+    flex-direction: column-reverse;
+    gap: 10px;
+  }
+
+  .legal-btn-cancel, .legal-btn-accept {
+    width: 100%;
+    text-align: center;
+  }
+
   .cta-final-section {
     padding: 60px 16px 80px;
   }
@@ -1369,6 +1546,7 @@ html, body {
     justify-content: center;
   }
 }
+
 /* =========================================================
    PRELOADER SCREEN (1.5s DURATION)
 ========================================================= */
@@ -1379,11 +1557,11 @@ html, body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: #030305; /* สีพื้นหลังโทนเดียวกับเว็บ */
+  background-color: #030305;
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 99999; /* อยู่ชั้นบนสุด */
+  z-index: 99999;
   transition: opacity 0.5s ease, visibility 0.5s ease;
 }
 
@@ -1400,14 +1578,13 @@ html, body {
 }
 
 .loader-logo {
-  width: 140px; /* Adjust size if needed */
+  width: 140px;
   height: auto;
   object-fit: contain;
   filter: drop-shadow(0 0 12px rgba(239, 68, 68, 0.4));
   animation: pulseLogo 1.5s infinite ease-in-out;
 }
 
-/* หลอดพื้นหลัง */
 .loader-bar-bg {
   width: 100px;
   height: 2px;
@@ -1417,11 +1594,10 @@ html, body {
   position: relative;
 }
 
-/* หลอดวิ่งโหลด 1.5 วินาที */
 .loader-bar {
   width: 0%;
   height: 100%;
-  background: #ef4444; /* สีแดงประจำธีม */
+  background: #ef4444;
   box-shadow: 0 0 8px #ef4444;
   animation: fillBar 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
@@ -1435,11 +1611,11 @@ html, body {
   0%, 100% { transform: scale(1); opacity: 0.9; }
   50% { transform: scale(1.05); opacity: 1; }
 }
+
 /* =========================================================
    SCROLL REVEAL TRANSITION EFFECTS
 ========================================================= */
 
-/* กำหนดสถานะเริ่มต้นก่อนที่ Element จะเลื่อนขึ้นมาแสดงบนจอ */
 .reveal-on-scroll {
   opacity: 0;
   transform: translateY(30px);
@@ -1448,13 +1624,11 @@ html, body {
   will-change: opacity, transform;
 }
 
-/* เมื่อเลื่อนมาเจอ (เพิ่มคลาส active ผ่าน JS) จะค่อยๆ เผยขึ้นมา */
 .reveal-on-scroll.active {
   opacity: 1;
   transform: translateY(0);
 }
 
-/* เอฟเฟกต์แบบแยกย่อยตามทิศทางและความเร็วเพิ่มเติม (ถ้าต้องการความหลากหลาย) */
 .reveal-left {
   opacity: 0;
   transform: translateX(-40px);
@@ -1477,4 +1651,198 @@ html, body {
 .reveal-right.active {
   opacity: 1;
   transform: translateX(0);
+}
+
+/* =========================================================
+   FOOTER SECTION STYLES
+========================================================= */
+.site-footer {
+  background-color: #07070a;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 80px 24px 40px;
+  color: #9ca3af;
+  font-family: inherit;
+}
+
+.footer-inner-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-top-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .footer-top-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+  .footer-brand-col {
+    grid-column: span 2;
+  }
+}
+
+.footer-brand-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.footer-logo-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.footer-logo-img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.footer-brand-name {
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.footer-brand-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #9ca3af;
+  max-width: 320px;
+}
+
+.footer-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #34d399;
+  margin-top: 8px;
+  letter-spacing: 0.5px;
+}
+
+.status-dot-pulse {
+  width: 8px;
+  height: 8px;
+  background-color: #34d399;
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(52, 211, 153, 0.6);
+}
+
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.footer-col-title {
+  color: #e5e7eb;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.footer-links-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-link {
+  color: #9ca3af;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+
+.footer-link:hover {
+  color: #ffffff;
+}
+
+.footer-divider {
+  width: 100%;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.06);
+  margin: 60px 0 30px;
+}
+
+.footer-disclaimer {
+  font-size: 11px;
+  line-height: 1.6;
+  color: #6b7280;
+  margin-bottom: 30px;
+}
+
+.footer-disclaimer span {
+  color: #9ca3af;
+  font-weight: 600;
+}
+
+.footer-bottom-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+@media (max-width: 600px) {
+  .footer-bottom-row {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+}
+
+.footer-social-icons {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.footer-social-link {
+  color: #9ca3af;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-social-link:hover {
+  color: #ffffff;
+}
+/* Custom Scrollbar สำหรับกล่องข้อความ legal-scroll-box */
+.legal-scroll-box::-webkit-scrollbar {
+  width: 6px; /* ปรับความกว้างให้เล็กลง */
+}
+
+.legal-scroll-box::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03); /* พื้นหลังร่อง Scrollbar */
+  border-radius: 4px;
+}
+
+.legal-scroll-box::-webkit-scrollbar-thumb {
+  background: rgba(239, 68, 68, 0.4); /* สีแท่ง Scrollbar (โทนแดง FSEGO) */
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.legal-scroll-box::-webkit-scrollbar-thumb:hover {
+  background: rgba(239, 68, 68, 0.8); /* สีตอนนำเมาส์ไปชี้ */
+}
+
+/* รองรับ Firefox */
+.legal-scroll-box {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(239, 68, 68, 0.5) rgba(255, 255, 255, 0.03);
 }

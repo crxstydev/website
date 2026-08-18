@@ -77,9 +77,27 @@ function App() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const canvasRef = useRef(null);
 
+  // State for Purchase Agreement Modal & Checkbox State
+  const [isAgreementOpen, setIsAgreementOpen] = useState(false);
+  const [isAccepted, setIsAccepted] = useState(false);
+
+  // Handler to open Purchase Agreement Modal
+  const handleOpenAgreement = (e) => {
+    if (e) e.preventDefault();
+    setIsAccepted(false); // Reset check state on open
+    setIsAgreementOpen(true);
+  };
+
+  // Handler to accept terms and redirect to Instagram
+  const handleAcceptAndRedirect = () => {
+    if (!isAccepted) return;
+    setIsAgreementOpen(false);
+    window.open(INSTAGRAM_URL, "_blank", "noopener,noreferrer");
+  };
+
   // Scroll Reveal Observer Effect
   useEffect(() => {
-    const observerCallback = (entries, observer) => {
+    const observerCallback = (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add("active");
@@ -122,17 +140,61 @@ function App() {
   // State for Student Showcase Section
   const [showcaseIndex, setShowcaseIndex] = useState(0);
 
-  // State for Lightbox Modal
+  // State for Image Lightbox Modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImageSrc, setModalImageSrc] = useState("");
+
+  // State for Legal Modal
+  const [legalModalContent, setLegalModalContent] = useState(null);
 
   // Assets
   const images = ["/tem1.png", "/tem2.png", "/tem3.png", "/tem4.png"];
   const studentImages = ["/st1.png", "/st2.png", "/st3.png", "/st4.png", "/st5.png"];
 
+  // Legal Modal Handler
+  const openLegalModal = (e, type) => {
+    e.preventDefault();
+    if (type === "terms") {
+      setLegalModalContent({
+        title: "Terms of Service",
+        body: (
+          <div>
+            <p><strong>1. Educational Purpose Only</strong><br />All educational materials, live sessions, chart templates, and community discussions provided by FSEGO Academy are strictly for educational and informational purposes only. Nothing provided constitutes financial, investment, or legal advice.</p>
+            <p style={{ marginTop: "12px" }}><strong>2. Intellectual Property & Non-Redistribution</strong><br />All course materials, video lectures, indicators, and Motivewave templates are exclusive properties of FSEGO Academy. Unlawful copying, sharing, recording, or redistributing course materials will result in an immediate permanent ban without refund and potential legal action.</p>
+            <p style={{ marginTop: "12px" }}><strong>3. Refund Policy</strong><br />Due to the digital nature of our proprietary trading materials, templates, and instant access to our Discord community, all course purchases and mentorship fees are strictly non-refundable once access has been granted.</p>
+          </div>
+        )
+      });
+    } else if (type === "privacy") {
+      setLegalModalContent({
+        title: "Privacy Policy",
+        body: (
+          <div>
+            <p><strong>1. Data Collection</strong><br />FSEGO Academy collects minimal required personal information (such as email, Discord handle, or Instagram handle) exclusively for account verification, enrollment processing, and customer support.</p>
+            <p style={{ marginTop: "12px" }}><strong>2. Use of Information</strong><br />Your personal information is strictly used to deliver service access, updates, and community support. We do not sell, rent, or trade student data to third parties.</p>
+            <p style={{ marginTop: "12px" }}><strong>3. Security</strong><br />We implement robust data security measures to ensure your personal contact details remain protected and confidential.</p>
+          </div>
+        )
+      });
+    } else if (type === "risk") {
+      setLegalModalContent({
+        title: "Risk Disclosure",
+        body: (
+          <div>
+            <p><strong>1. High-Risk Warning</strong><br />Trading foreign exchange (Forex), futures, commodities, and digital assets on margin carries a high level of risk and may not be suitable for all investors. The high degree of leverage can work against you as well as for you.</p>
+            <p style={{ marginTop: "12px" }}><strong>2. No Guarantee of Profit</strong><br />Past performance, order flow analysis results, or student testimonials displayed on this site do not guarantee future results or profits. You should never trade with money you cannot afford to lose.</p>
+            <p style={{ marginTop: "12px" }}><strong>3. Independent Decision Making</strong><br />You are solely responsible for your trading decisions and risk management. FSEGO Academy is not responsible for any financial loss incurred during live trading execution.</p>
+          </div>
+        )
+      });
+    }
+  };
+
+  const closeLegalModal = () => setLegalModalContent(null);
+
   // Custom Smooth Scrolling with Easing
   const scrollToSection = (e, targetId) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     setActiveTab(targetId);
 
     const startPosition = window.pageYOffset;
@@ -195,13 +257,16 @@ function App() {
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (!isModalOpen) return;
-      if (e.key === "Escape") closeModal();
+      if (e.key === "Escape") {
+        closeModal();
+        closeLegalModal();
+        setIsAgreementOpen(false);
+      }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isModalOpen]);
+  }, []);
 
   const ratingCount = useCountUp(90, 1500, 0);
   const studentsCount = useCountUp(36, 1200, 0);
@@ -359,14 +424,13 @@ function App() {
           </p>
 
           <div className="hero-actions">
-            <a
-              href={INSTAGRAM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={(e) => scrollToSection(e, "courses")}
               className="get-started-white-btn"
+              style={{ border: "none", cursor: "pointer" }}
             >
               Get Started
-            </a>
+            </button>
           </div>
 
           <div className="minimal-stats">
@@ -568,14 +632,13 @@ function App() {
                   </div>
                 </div>
 
-                <a
-                  href={INSTAGRAM_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  onClick={handleOpenAgreement}
                   className="buy-action-btn"
+                  style={{ border: "none", cursor: "pointer", width: "100%" }}
                 >
                   Get Access Now
-                </a>
+                </button>
 
                 <div className="included-features-wrapper">
                   <div className="included-label">• INCLUDED WITH PURCHASE</div>
@@ -652,14 +715,13 @@ function App() {
                   </div>
                 </div>
 
-                <a
-                  href={INSTAGRAM_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  onClick={handleOpenAgreement}
                   className="buy-action-btn"
+                  style={{ border: "none", cursor: "pointer", width: "100%" }}
                 >
                   Get Access Now
-                </a>
+                </button>
 
                 <div className="included-features-wrapper">
                   <div className="included-label">• INCLUDED WITH PURCHASE</div>
@@ -708,7 +770,7 @@ function App() {
         </div>
       </section>
 
-      {/* REVIEWS SECTION (KEPT IN THAI AS REQUESTED) */}
+      {/* REVIEWS SECTION */}
       <section className="why-section" id="reviews">
         <div className="why-header reveal-on-scroll">
           <div>
@@ -793,7 +855,7 @@ function App() {
                 </div>
                 <h3 className="why-title" style={{ fontSize: "18px", margin: "0" }}>lnw_new</h3>
                 <p className="why-desc" style={{ fontSize: "14px", lineHeight: "1.6" }}>
-                  "สอนครั้งเเรกดีมากครับว้าวเลย เปิดประสบการณ์สุดๆทีแรกคิดว่าOrderflow จะแต่ถ้าลองเปิดในจริงๆง่ายม๊ากๆยิ่งคนสอนสอนเข้าใจสุดๆเนื้อแน่นๆ ทุกเนื้อหากระจ่างในการสอนเดียว พี่ไผ่เฟรนลี่คุยง่ายน่ารัก ไม่รู้สึกกดดันเลยเหมือนเป็นพี่ชายคนนึง สอนหมดไม่มีกั๊ก ถามได้หมด รักพี่ไผ่ฮ่ะ"
+                  "สอนครั้งเเรกดีมากครับว้าวเลย เปิดประสบการณ์สุดๆทีแรกคิดว่าOrderflow จะแต่ถ้าลองเปิดในจริงๆง่ายม๊ากๆยิ่งคนสอนสอนเข้าใจสุดๆเนื้อเนื้อหากระจ่างในการสอนเดียว พี่ไผ่เฟรนลี่คุยง่ายน่ารัก ไม่รู้สึกกดดันเลยเหมือนเป็นพี่ชายคนนึง สอนหมดไม่มีกั๊ก ถามได้หมด รักพี่ไผ่ฮ่ะ"
                 </p>
               </div>
             </TiltCard>
@@ -877,14 +939,13 @@ function App() {
             Order Flow isn't just a course — it's a proven methodology built by active traders, designed to refine your edge in live market conditions.
           </p>
           <div className="cta-buttons-group">
-            <a
-              href={INSTAGRAM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={(e) => scrollToSection(e, "courses")}
               className="cta-btn btn-get-started"
+              style={{ border: "none", cursor: "pointer" }}
             >
               Get Started
-            </a>
+            </button>
             <a 
               href="https://discord.gg/AbgJTN4dzc" 
               target="_blank" 
@@ -900,6 +961,91 @@ function App() {
         </div>
       </section>
 
+      {/* FOOTER SECTION */}
+      <footer className="site-footer">
+        <div className="footer-inner-container">
+          <div className="footer-top-grid">
+            {/* Brand Column */}
+            <div className="footer-brand-col">
+              <div className="footer-logo-row">
+                <img src="/logo.gif" alt="FSEGO Logo" className="footer-logo-img" />
+                <span className="footer-brand-name">FSEGO Academy</span>
+              </div>
+              <p className="footer-brand-desc">
+                Professional orderflow studies for institutional precision trading. Built to master the market edge.
+              </p>
+              <div className="footer-status-badge">
+                <span className="status-dot-pulse" />
+                OPERATIONAL
+              </div>
+            </div>
+
+            {/* Product Column */}
+            <div className="footer-col">
+              <div className="footer-col-title">PRODUCT</div>
+              <ul className="footer-links-list">
+                <li><a href="#courses" onClick={(e) => scrollToSection(e, "courses")} className="footer-link">Courses</a></li>
+                <li><a href="#courses" onClick={(e) => scrollToSection(e, "courses")} className="footer-link">VIP Mentorship</a></li>
+                <li><a href="#reviews" onClick={(e) => scrollToSection(e, "reviews")} className="footer-link">Reviews</a></li>
+                <li><a href="#showcase" onClick={(e) => scrollToSection(e, "showcase")} className="footer-link">Showcase</a></li>
+              </ul>
+            </div>
+
+            {/* Support Column */}
+            <div className="footer-col">
+              <div className="footer-col-title">SUPPORT</div>
+              <ul className="footer-links-list">
+                <li><a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="footer-link">Contact Support</a></li>
+                <li><a href="https://discord.gg/AbgJTN4dzc" target="_blank" rel="noopener noreferrer" className="footer-link">Discord Support</a></li>
+              </ul>
+            </div>
+
+            {/* Community Column */}
+            <div className="footer-col">
+              <div className="footer-col-title">COMMUNITY</div>
+              <ul className="footer-links-list">
+                <li><a href="https://discord.gg/AbgJTN4dzc" target="_blank" rel="noopener noreferrer" className="footer-link">Discord Community</a></li>
+                <li><a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="footer-link">Instagram</a></li>
+              </ul>
+            </div>
+
+            {/* Legal Column */}
+            <div className="footer-col">
+              <div className="footer-col-title">LEGAL</div>
+              <ul className="footer-links-list">
+                <li><a href="#terms" onClick={(e) => openLegalModal(e, "terms")} className="footer-link">Terms of Service</a></li>
+                <li><a href="#privacy" onClick={(e) => openLegalModal(e, "privacy")} className="footer-link">Privacy Policy</a></li>
+                <li><a href="#risk" onClick={(e) => openLegalModal(e, "risk")} className="footer-link">Risk Disclosure</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="footer-divider" />
+
+          <div className="footer-disclaimer">
+            <span>Disclaimer:</span> FSEGO Academy provides educational content and tools for informational purposes only and should not be considered as financial or investment advice. We are not licensed financial advisors, and nothing shared here constitutes a recommendation to buy, sell, or hold any financial instrument. Trading and investing in financial markets involve significant risk and may not be suitable for all individuals.
+          </div>
+
+          <div className="footer-bottom-row">
+            <div className="footer-copyright">
+              © 2026 FSEGO Academy. All rights reserved.
+            </div>
+            <div className="footer-social-icons">
+              <a href="https://discord.gg/AbgJTN4dzc" target="_blank" rel="noopener noreferrer" className="footer-social-link" title="Discord">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                  <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                </svg>
+              </a>
+              <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="footer-social-link" title="Instagram">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
+
       {/* LIGHTBOX MODAL */}
       {isModalOpen && (
         <div className="image-modal-overlay" onClick={closeModal}>
@@ -912,6 +1058,193 @@ function App() {
               alt="Preview Full"
               className="modal-preview-img"
             />
+          </div>
+        </div>
+      )}
+
+      {/* PURCHASE AGREEMENT / TERMS MODAL (PROFESSIONAL LEGAL BINDING) */}
+      {isAgreementOpen && (
+        <div className="image-modal-overlay" onClick={() => setIsAgreementOpen(false)}>
+          <div 
+            className="liquid-glass" 
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              maxWidth: "600px",
+              width: "90%",
+              padding: "32px",
+              borderRadius: "16px",
+              position: "relative",
+              border: "1px solid rgba(239, 68, 68, 0.4)",
+              background: "#0d0d12",
+              boxShadow: "0 25px 60px rgba(0, 0, 0, 0.9), 0 0 35px rgba(239, 68, 68, 0.2)"
+            }}
+          >
+            <button 
+              className="modal-close-btn" 
+              onClick={() => setIsAgreementOpen(false)} 
+              aria-label="Close Modal"
+              style={{
+                position: "absolute",
+                top: "16px",
+                right: "16px",
+                background: "rgba(255, 255, 255, 0.05)",
+                border: "1px solid rgba(255, 255, 255, 0.1)",
+                color: "#a1a1aa",
+                width: "32px",
+                height: "32px",
+                borderRadius: "50%",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "14px",
+                transition: "all 0.2s ease"
+              }}
+            >
+              ✕
+            </button>
+
+            {/* Header Area */}
+            <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "20px", borderBottom: "1px solid rgba(255,255,255,0.08)", paddingBottom: "16px" }}>
+              <img src="/logo1.png" alt="FSEGO Logo" style={{ width: "48px", height: "48px", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.1)" }} />
+              <div>
+                <h3 style={{ fontSize: "20px", color: "#fff", margin: 0, fontWeight: "700", fontFamily: "monospace", letterSpacing: "0.5px" }}>
+                  LEGAL PURCHASE AGREEMENT
+                </h3>
+                <span style={{ fontSize: "12px", color: "#ef4444", fontWeight: "600" }}>
+                  CONFIDENTIALITY & INTELLECTUAL PROPERTY POLICY
+                </span>
+              </div>
+            </div>
+
+            {/* Scrollable Terms Content */}
+<div 
+  className="legal-scroll-box"
+  style={{
+    maxHeight: "220px",
+    overflowY: "auto",
+    paddingRight: "10px",
+    fontSize: "13px",
+    color: "#a1a1aa",
+    lineHeight: "1.6",
+    display: "flex",
+    flexDirection: "column",
+    gap: "12px",
+    background: "rgba(0,0,0,0.3)",
+    padding: "16px",
+    borderRadius: "8px",
+    border: "1px solid rgba(255,255,255,0.05)"
+            }}>
+              <div>
+                <strong style={{ color: "#fff" }}>1. STRICT NON-DISCLOSURE & PROPRIETARY RIGHTS</strong><br />
+                All course content, video lectures, proprietary chart templates, indicators, and Discord community materials are exclusive intellectual property of FSEGO Academy.
+              </div>
+              <div>
+                <strong style={{ color: "#ef4444" }}>2. PROHIBITION OF RESALE AND REDISTRIBUTION</strong><br />
+                Any unauthorized recording, sharing, reselling, or public dissemination of these materials is strictly prohibited under applicable Intellectual Property Laws.
+              </div>
+              <div>
+                <strong style={{ color: "#fff" }}>3. LEGAL PENALTIES & ENFORCEMENT</strong><br />
+                Violations will result in an immediate lifetime access revocation without refund, followed by a fine enforcement of <strong style={{ color: "#fff", textDecoration: "underline" }}>50,000 THB</strong> and full legal prosecution for damages.
+              </div>
+              <div>
+                <strong style={{ color: "#fff" }}>4. FINAL ACCESS DIRECTIVE</strong><br />
+                By proceeding, you agree to be bound by these legal terms and acknowledge that your enrollment is strictly for personal educational usage.
+              </div>
+            </div>
+
+            {/* Checkbox Area */}
+            <label style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+              marginTop: "20px",
+              cursor: "pointer",
+              fontSize: "13px",
+              color: isAccepted ? "#fff" : "#a1a1aa",
+              userSelect: "none"
+            }}>
+              <input 
+                type="checkbox" 
+                checked={isAccepted} 
+                onChange={(e) => setIsAccepted(e.target.checked)}
+                style={{ width: "16px", height: "16px", accentColor: "#ef4444", cursor: "pointer" }}
+              />
+              <span>I have read and agree to the Legal Terms and Fine Policy.</span>
+            </label>
+
+            {/* Action Buttons */}
+            <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end", marginTop: "24px" }}>
+              <button 
+                onClick={() => setIsAgreementOpen(false)}
+                style={{
+                  padding: "10px 20px",
+                  borderRadius: "8px",
+                  background: "transparent",
+                  border: "1px solid rgba(255, 255, 255, 0.15)",
+                  color: "#a1a1aa",
+                  cursor: "pointer",
+                  fontWeight: "500",
+                  fontSize: "14px",
+                  transition: "all 0.2s ease"
+                }}
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={handleAcceptAndRedirect}
+                disabled={!isAccepted}
+                style={{
+                  padding: "10px 24px",
+                  borderRadius: "8px",
+                  background: isAccepted ? "#ef4444" : "#3f3f46",
+                  border: "none",
+                  color: isAccepted ? "#fff" : "#71717a",
+                  cursor: isAccepted ? "pointer" : "not-allowed",
+                  fontWeight: "600",
+                  fontSize: "14px",
+                  boxShadow: isAccepted ? "0 0 20px rgba(239, 68, 68, 0.5)" : "none",
+                  transition: "all 0.2s ease",
+                  opacity: isAccepted ? 1 : 0.6
+                }}
+              >
+                Accept & Proceed
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* LEGAL DOCUMENT MODAL */}
+      {legalModalContent && (
+        <div className="image-modal-overlay" onClick={closeLegalModal}>
+          <div 
+            className="liquid-glass" 
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              maxWidth: "600px",
+              width: "90%",
+              padding: "32px",
+              borderRadius: "16px",
+              position: "relative",
+              border: "1px solid rgba(239, 68, 68, 0.3)",
+              background: "#0d0d12"
+            }}
+          >
+            <button 
+              className="modal-close-btn" 
+              onClick={closeLegalModal} 
+              aria-label="Close Legal Modal"
+              style={{ top: "16px", right: "16px" }}
+            >
+              ✕
+            </button>
+            <h3 style={{ fontSize: "20px", color: "#fff", marginBottom: "16px", fontFamily: "monospace" }}>
+              {legalModalContent.title}
+            </h3>
+            <div style={{ fontSize: "14px", color: "#a1a1aa", lineHeight: "1.6" }}>
+              {legalModalContent.body}
+            </div>
           </div>
         </div>
       )}

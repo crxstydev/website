@@ -4,23 +4,33 @@ import "./App.css";
 // Instagram Target URL
 const INSTAGRAM_URL = "https://www.instagram.com/crx.wrld?igsh=NGc0dXIwMWs5ZmQ2&utm_source=qr";
 
-// Hook for Count Up Animation
-function useCountUp(end, duration = 1500, decimals = 0) {
+// Hook for Count Up Animation (ปรับเพิ่ม Delay Parameter)
+function useCountUp(end, duration = 1500, decimals = 0, delay = 0) {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
     let startTimestamp = null;
-    const step = (timestamp) => {
-      if (!startTimestamp) startTimestamp = timestamp;
-      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-      const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
-      setCount(easeProgress * end);
-      if (progress < 1) {
-        window.requestAnimationFrame(step);
-      }
+    let animationFrameId;
+
+    // ตั้งเวลา Delay ก่อนเริ่มรัน Animation
+    const timer = setTimeout(() => {
+      const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+        setCount(easeProgress * end);
+        if (progress < 1) {
+          animationFrameId = window.requestAnimationFrame(step);
+        }
+      };
+      animationFrameId = window.requestAnimationFrame(step);
+    }, delay);
+
+    return () => {
+      clearTimeout(timer);
+      if (animationFrameId) window.cancelAnimationFrame(animationFrameId);
     };
-    window.requestAnimationFrame(step);
-  }, [end, duration]);
+  }, [end, duration, delay]);
 
   return count.toFixed(decimals);
 }
@@ -81,6 +91,46 @@ function App() {
   const [isAgreementOpen, setIsAgreementOpen] = useState(false);
   const [isAccepted, setIsAccepted] = useState(false);
 
+  // State for Course Packages & Carousel
+  const [selectedPlan, setSelectedPlan] = useState("selfPaced");
+  const [imgIndex, setImgIndex] = useState(0);
+
+  // State for Student Showcase Section
+  const [showcaseIndex, setShowcaseIndex] = useState(0);
+
+  // State for Image Lightbox Modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalImageSrc, setModalImageSrc] = useState("");
+
+  // State for Legal Modal
+  const [legalModalContent, setLegalModalContent] = useState(null);
+
+  // Disable scroll on both <html> and <body> when any modal is active
+  useEffect(() => {
+    const isAnyModalOpen = isAgreementOpen || isModalOpen || legalModalContent !== null;
+
+    const html = document.documentElement;
+    const body = document.body;
+
+    if (isAnyModalOpen) {
+      // บล็อกการเลื่อนทั้ง html และ body
+      html.style.overflow = "hidden";
+      body.style.overflow = "hidden";
+      body.style.touchAction = "none"; // ป้องกัน Touch scroll ในมือถือ
+    } else {
+      // คืนค่าเดิมเมื่อปิด Modal
+      html.style.overflow = "";
+      body.style.overflow = "";
+      body.style.touchAction = "";
+    }
+
+    return () => {
+      html.style.overflow = "";
+      body.style.overflow = "";
+      body.style.touchAction = "";
+    };
+  }, [isAgreementOpen, isModalOpen, legalModalContent]);
+
   // Handler to open Purchase Agreement Modal
   const handleOpenAgreement = (e) => {
     if (e) e.preventDefault();
@@ -132,20 +182,6 @@ function App() {
 
     return () => clearTimeout(timer);
   }, []);
-
-  // State for Course Packages & Carousel
-  const [selectedPlan, setSelectedPlan] = useState("selfPaced");
-  const [imgIndex, setImgIndex] = useState(0);
-
-  // State for Student Showcase Section
-  const [showcaseIndex, setShowcaseIndex] = useState(0);
-
-  // State for Image Lightbox Modal
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalImageSrc, setModalImageSrc] = useState("");
-
-  // State for Legal Modal
-  const [legalModalContent, setLegalModalContent] = useState(null);
 
   // Assets
   const images = ["/tem1.png", "/tem2.png", "/tem3.png", "/tem4.png"];
@@ -268,8 +304,9 @@ function App() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  const ratingCount = useCountUp(90, 1500, 0);
-  const studentsCount = useCountUp(36, 1200, 0);
+  // ตั้งค่า Delay ให้กับตัวเลข (รอ 1.6 วินาทีให้ Preloader หายก่อนค่อยเริ่มนับ)
+  const ratingCount = useCountUp(90, 1500, 0, 1600);
+  const studentsCount = useCountUp(36, 1200, 0, 1800);
 
   // Cursor Tracker
   useEffect(() => {
@@ -968,7 +1005,7 @@ function App() {
             {/* Brand Column */}
             <div className="footer-brand-col">
               <div className="footer-logo-row">
-                <img src="/logo.gif" alt="FSEGO Logo" className="footer-logo-img" />
+                <img src="/logo1.png" alt="FSEGO Logo" className="footer-logo-img" />
                 <span className="footer-brand-name">FSEGO Academy</span>
               </div>
               <p className="footer-brand-desc">
@@ -1118,22 +1155,20 @@ function App() {
             </div>
 
             {/* Scrollable Terms Content */}
-<div 
-  className="legal-scroll-box"
-  style={{
-    maxHeight: "220px",
-    overflowY: "auto",
-    paddingRight: "10px",
-    fontSize: "13px",
-    color: "#a1a1aa",
-    lineHeight: "1.6",
-    display: "flex",
-    flexDirection: "column",
-    gap: "12px",
-    background: "rgba(0,0,0,0.3)",
-    padding: "16px",
-    borderRadius: "8px",
-    border: "1px solid rgba(255,255,255,0.05)"
+            <div style={{
+              maxHeight: "220px",
+              overflowY: "auto",
+              paddingRight: "8px",
+              fontSize: "13px",
+              color: "#a1a1aa",
+              lineHeight: "1.6",
+              display: "flex",
+              flexDirection: "column",
+              gap: "12px",
+              background: "rgba(0,0,0,0.3)",
+              padding: "16px",
+              borderRadius: "8px",
+              border: "1px solid rgba(255,255,255,0.05)"
             }}>
               <div>
                 <strong style={{ color: "#fff" }}>1. STRICT NON-DISCLOSURE & PROPRIETARY RIGHTS</strong><br />

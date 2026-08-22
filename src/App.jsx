@@ -306,7 +306,7 @@ function App() {
 
   // ตั้งค่า Delay ให้กับตัวเลข (รอ 1.6 วินาทีให้ Preloader หายก่อนค่อยเริ่มนับ)
   const ratingCount = useCountUp(90, 1500, 0, 1600);
-  const studentsCount = useCountUp(39, 1200, 0, 1800);
+  const studentsCount = useCountUp(50, 1200, 0, 1800);
 
   // Cursor Tracker
   useEffect(() => {
